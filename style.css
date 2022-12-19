@@ -1,0 +1,41 @@
+body {
+    font-family: 'Caramel';
+    font-size: 32px;
+    display: block;
+    background-color:darkgrey
+}
+.header {
+    font-family: 'Caramel';
+    font-size: 5rem;
+    text-align: center;
+    margin-top: 20px;
+    display: block;
+    background-image: url(./images/headerimg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 200px;
+    width: auto;
+    margin-top: 0%;
+}
+img {
+    border-radius: 4px;
+    height: 200px;
+    width: auto;
+}
+.content {
+    display: block;
+
+}
+.data {
+    font-size: 4rem;
+    text-align: center;
+    color: darkgreen;
+}
+.name, .address {
+    font-size: 2rem;
+    color: black;
+    line-height: 3px;
+}
+.name {
+    text-decoration: underline;
+}
