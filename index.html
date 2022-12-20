@@ -1,20 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caroling 2022</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caramel&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="main.js"></script>
-    <style>
-        /* Set the sixe of the div element that contains the map */
-        #map {
-            height: 400px;
-            width: 600px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caroling 2022</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caramel&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js"></script>
+  <!-- Load the Google Maps JavaScript API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_dLcHwQ4fGbF6oDlRLcIRYBN7hRLWUaw"></script>
+  <style>
+    /* Set the size of the div element that contains the map */
+    #map {
+      height: 400px;
+      width: 600px;
+    }
+  </style>
+<script>
+  // Declare the map variable in the global scope
+  var map;
+
+  // Define the addresses array
+  var addresses = [     
+    {name: 'Dorin Mustyatsa', addressLine1: '3649 Jasmine Ct', city: 'Wake Forest', state: 'NC'},     
+    {name: 'George Tsurkan', addressLine1: '170 Clubhouse Dr', city: 'Youngsville', state: 'NC'},
+    {name: 'Pavel Romarniuc', addressLine1: '2332 Longmont St', city: 'Wake Forest', state: 'NC'},     
+    {name: 'Ion Neaga', addressLine1: '812 Tree Green Lane', city: 'Wake Forest', state: 'NC'}, 
+    {name: 'Serghei Tricolici', addressLine1: '2304 Verdant Ct', city: 'Wake Forest', state: 'NC'},     
+    {name: 'Vitalie Cojan', addressLine1: '405 Barnard Castle Ct', city: 'Rolesville', state: 'NC'},    
+    {name: 'Steopa Gergi', addressLine1: '238 Roaring Creek Dr', city: 'Garner', state: 'NC'}
+  ];
+
+  // Initialize the map
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: {lat: 36.09, lng: -78.56} // Set the center of the map to Wake Forest, NC
+    });
+  }
+
+  // Loop through the addresses array and set the latitude and longitude values for each address
+  for (var i = 0; i < addresses.length; i++) {
+    var address = addresses[i];
+
+    // Use the Google Maps Geocoding API to convert the address into latitude and longitude values
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address': address.addressLine1 + ' ' + address.city + ' ' + address.state}, function(results, status) {
+  if (status === 'OK') {
+    // Set the latitude and longitude values for the address
+    address.latitude = results[0].geometry.location.lat();
+    address.longitude = results[0].geometry.location.lng();
+
+    // Create a marker for the address
+    var marker = new google.maps.Marker({
+      position: {lat: address.latitude, lng: address.longitude},
+      map: map,
+      title: address.name
+    });
+  }
+});
+    }
+    window.initMap = initMap;
+  </script>
+
 </head>
 <body>
     <div class="header">
@@ -30,10 +79,20 @@
             <div class="address">
             <p>3649 Jasmine Ct,</p>
             <p>Wake Forest, NC 27587</p>
-        </div>
+        </div>            
+            <li class="name">George Tsurkan</li>
+            <div class="address">
+                <p>170 Clubhouse Dr</p>
+                <p>Youngsville, NC 27596</p>
+            </div>
             <li class="name">Pavel Romarniuc</li>
             <div class="address">
                 <p>2332 Longmont St</p>
+                <p>Wake Forest, NC 27587</p>
+            </div>
+            <li class="name">Ion Neaga</li>
+            <div class="address">
+                <p>812 Tree Green Lane</p>
                 <p>Wake Forest, NC 27587</p>
             </div>
             <li class="name">Serghei Tricolici</li>
@@ -46,85 +105,23 @@
                 <p>405 Barnard Castle Ct</p>
                 <p>Rolesville, NC 27571</p>
             </div>
-            <li class="name">George Tsurkan</li>
+            <li class="name">Stoepa Gergi</li>
             <div class="address">
-                <p>170 Clubhouse Dr</p>
-                <p>Youngsville, NC 27596</p>
+                <p>238 Roaring Creek Dr</p>
+                <p>Garner, NC 27529</p>
             </div>
         </ol>
     </div>
 </section>
-
+<div class="data">
+    <h2>Check the map below to see where we currently are</h2>
+</div>
+<!--The div element for the map -->
 <div id="map"></div>
 <script>
-    var addresses = [ 
-      {name: 'Dorin Mustyatsa', addressLine1: '3649 Jasmine Ct', city: 'Wake Forest', state: 'NC'}, 
-      {name: 'Pavel Romarniuc', addressLine1: '2332 Longmont St', city: 'Wake Forest', state: 'NC'}, 
-      {name: 'Serghei Tricolici', addressLine1: '2304 Verdant Ct', city: 'Wake Forest', state: 'NC'}, 
-      {name: 'Vitalie Cojan', addressLine1: '405 Barnard Castle Ct', city: 'Rolesville', state: 'NC'},
-      {name: 'George Tsurkan', addressLine1: '170 Clubhouse Dr', city: 'Youngsville', state: 'NC'}
-    ];
-    
-    // Create a function to track the movements 
-    function trackMovements(addresses) { 
-        for (let i = 0; i < addresses.length; i++) { 
-            console.log(`Tracking movement of ${addresses[i].name} from ${addresses[i].addressLine1}, ${addresses[i].city} ${addresses[i].state}`); 
-        } 
-    } 
-        // Load the Maps JavaScript API 
-        let script = document.createElement('script'); 
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB_dLcHwQ4fGbF6oDlRLcIRYBN7hRLWUaw&callback=initMap'; 
-        script.async = true; 
-        document.head.appendChild(script); 
-      
-        //Initialize and add map
-        let map;
-        function initMap() {
-            map= new google.maps.Map(document.getElelmentById('map'), {
-                zoom: 6,
-                center: {lat: 35.87804789726554, lng: -78.642020029174}
-            });
-            }
-
-            const addresses = [
-                {lat: 35.87, lng: -78.64},
-                {lat: 35.95, lng: -78.47},
-            ]
-
-        // Create a map 
-        function initMap() {
-          // Set the initial location
-          let currentLocation = {lat: 36.0906133482528, lng: -78.56907945125914};
-
-      // Create the map
-      let map = new google.maps.Map(document.getElementById('map'), {
-        center: currentLocation,
-        zoom: 12
-      });
-  
-      // Add a marker for the current location
-      let marker = new google.maps.Marker({
-        position: currentLocation,
-        map: map
-      });
-  
-// Create an info window for the current location
-let infoWindow = new google.maps.InfoWindow({
-  content: `<h1>${addresses[0].name}</h1><p>${addresses[0].address}, ${addresses[0].city} ${addresses[0].state}</p>`
-});
-infoWindow.open(map, marker);
-
-// Set up an event listener to update the location when the user clicks on a new address
-let list = document.getElementById('addresses');
-list.addEventListener('click', function(event) {
-  let addressIndex = event.target.getAttribute('data-index');
-  if (addressIndex) {
-    currentLocation = {lat: addresses[addressIndex].addressLine1, lng: addresses[addressIndex].addressLine2};
-    map.setCenter(currentLocation);
-    marker.setPosition(currentLocation);
-    infoWindow.setContent(`<h1>${addresses[addressIndex].name}</h1><p>${addresses[addressIndex].address}, ${addresses[addressIndex].city} ${addresses[addressIndex].state}</p>`);
-  }
-}); 
-</script>
+    window.onload = function() {
+      initMap();
+    }
+  </script>
 </body>
 </html>
